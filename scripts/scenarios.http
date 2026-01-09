@@ -1,0 +1,118 @@
+@baseUrl = http://localhost:8080
+@authEmail = test.user@example.com
+@authPassword = password123
+
+### Create user
+# curl -sS -X POST "{{baseUrl}}/v1/users" -H "Content-Type: application/json" -d '{"name":"Scenario User","address":{"line1":"1 High Street","town":"London","county":"Greater London","postcode":"SW1A 1AA"},"phoneNumber":"+447700900999","email":"scenario@example.com"}'
+POST {{baseUrl}}/v1/users
+Content-Type: application/json
+
+{
+  "name": "Scenario User",
+  "address": {
+    "line1": "1 High Street",
+    "town": "London",
+    "county": "Greater London",
+    "postcode": "SW1A 1AA"
+  },
+  "phoneNumber": "+447700900999",
+  "email": "scenario@example.com"
+}
+
+### Create user - missing data
+# curl -sS -X POST "{{baseUrl}}/v1/users" -H "Content-Type: application/json" -d '{"name":"Missing Required"}'
+POST {{baseUrl}}/v1/users
+Content-Type: application/json
+
+{
+  "name": "Missing Required"
+}
+
+### Authenticate
+# curl -sS -X POST "{{baseUrl}}/v1/auth/login" -H "Content-Type: application/json" -d '{"email":"{{authEmail}}","password":"{{authPassword}}"}'
+POST {{baseUrl}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{authEmail}}",
+  "password": "{{authPassword}}"
+}
+
+### Fetch user by ID (replace {userId} and token)
+# curl -sS -X GET "{{baseUrl}}/v1/users/{userId}" -H "Authorization: Bearer {{token}}"
+GET {{baseUrl}}/v1/users/{userId}
+Authorization: Bearer {{token}}
+
+### Update user (replace {userId} and token)
+# curl -sS -X PATCH "{{baseUrl}}/v1/users/{userId}" -H "Authorization: Bearer {{token}}" -H "Content-Type: application/json" -d '{"name":"Updated Name"}'
+PATCH {{baseUrl}}/v1/users/{userId}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Updated Name"
+}
+
+### Delete user (replace {userId} and token)
+# curl -sS -X DELETE "{{baseUrl}}/v1/users/{userId}" -H "Authorization: Bearer {{token}}"
+DELETE {{baseUrl}}/v1/users/{userId}
+Authorization: Bearer {{token}}
+
+### Create account (replace token)
+# curl -sS -X POST "{{baseUrl}}/v1/accounts" -H "Authorization: Bearer {{token}}" -H "Content-Type: application/json" -d '{"name":"Personal Account","accountType":"personal"}'
+POST {{baseUrl}}/v1/accounts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Personal Account",
+  "accountType": "personal"
+}
+
+### List accounts (replace token)
+# curl -sS -X GET "{{baseUrl}}/v1/accounts" -H "Authorization: Bearer {{token}}"
+GET {{baseUrl}}/v1/accounts
+Authorization: Bearer {{token}}
+
+### Fetch account (replace {accountId} and token)
+# curl -sS -X GET "{{baseUrl}}/v1/accounts/{accountId}" -H "Authorization: Bearer {{token}}"
+GET {{baseUrl}}/v1/accounts/{accountId}
+Authorization: Bearer {{token}}
+
+### Update account (replace {accountId} and token)
+# curl -sS -X PATCH "{{baseUrl}}/v1/accounts/{accountId}" -H "Authorization: Bearer {{token}}" -H "Content-Type: application/json" -d '{"name":"Updated Account Name"}'
+PATCH {{baseUrl}}/v1/accounts/{accountId}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Updated Account Name"
+}
+
+### Delete account (replace {accountId} and token)
+# curl -sS -X DELETE "{{baseUrl}}/v1/accounts/{accountId}" -H "Authorization: Bearer {{token}}"
+DELETE {{baseUrl}}/v1/accounts/{accountId}
+Authorization: Bearer {{token}}
+
+### Create transaction (replace {accountId} and token)
+# curl -sS -X POST "{{baseUrl}}/v1/accounts/{accountId}/transactions" -H "Authorization: Bearer {{token}}" -H "Content-Type: application/json" -d '{"amount":10.99,"currency":"GBP","type":"deposit","reference":"Top up"}'
+POST {{baseUrl}}/v1/accounts/{accountId}/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "amount": 10.99,
+  "currency": "GBP",
+  "type": "deposit",
+  "reference": "Top up"
+}
+
+### List transactions (replace {accountId} and token)
+# curl -sS -X GET "{{baseUrl}}/v1/accounts/{accountId}/transactions" -H "Authorization: Bearer {{token}}"
+GET {{baseUrl}}/v1/accounts/{accountId}/transactions
+Authorization: Bearer {{token}}
+
+### Fetch transaction (replace {accountId}, {transactionId}, token)
+# curl -sS -X GET "{{baseUrl}}/v1/accounts/{accountId}/transactions/{transactionId}" -H "Authorization: Bearer {{token}}"
+GET {{baseUrl}}/v1/accounts/{accountId}/transactions/{transactionId}
+Authorization: Bearer {{token}}

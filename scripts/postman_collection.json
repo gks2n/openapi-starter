@@ -1,0 +1,240 @@
+{
+  "info": {
+    "_postman_id": "e6d59b25-7b6c-4b6a-8b51-6b8abf0a9b6d",
+    "name": "Eagle Bank Scenarios",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "authEmail", "value": "test.user@example.com" },
+    { "key": "authPassword", "value": "password123" },
+    { "key": "token", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "accountId", "value": "" },
+    { "key": "transactionId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Create user",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "users"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Scenario User\",\n  \"address\": {\n    \"line1\": \"1 High Street\",\n    \"town\": \"London\",\n    \"county\": \"Greater London\",\n    \"postcode\": \"SW1A 1AA\"\n  },\n  \"phoneNumber\": \"+447700900999\",\n  \"email\": \"scenario@example.com\"\n}\n"
+        }
+      }
+    },
+    {
+      "name": "Create user - missing data",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "users"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Missing Required\"\n}\n"
+        }
+      }
+    },
+    {
+      "name": "Authenticate",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "auth", "login"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{authEmail}}\",\n  \"password\": \"{{authPassword}}\"\n}\n"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const data = pm.response.json();",
+              "if (data && data.accessToken) {",
+              "  pm.collectionVariables.set('token', data.accessToken);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fetch user",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/users/{{userId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "users", "{{userId}}"]
+        }
+      }
+    },
+    {
+      "name": "Update user",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/users/{{userId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "users", "{{userId}}"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Updated Name\"\n}\n"
+        }
+      }
+    },
+    {
+      "name": "Delete user",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/users/{{userId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "users", "{{userId}}"]
+        }
+      }
+    },
+    {
+      "name": "Create account",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/accounts",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "accounts"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Personal Account\",\n  \"accountType\": \"personal\"\n}\n"
+        }
+      }
+    },
+    {
+      "name": "List accounts",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/accounts",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "accounts"]
+        }
+      }
+    },
+    {
+      "name": "Fetch account",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/accounts/{{accountId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "accounts", "{{accountId}}"]
+        }
+      }
+    },
+    {
+      "name": "Update account",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/accounts/{{accountId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "accounts", "{{accountId}}"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Updated Account Name\"\n}\n"
+        }
+      }
+    },
+    {
+      "name": "Delete account",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/accounts/{{accountId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "accounts", "{{accountId}}"]
+        }
+      }
+    },
+    {
+      "name": "Create transaction",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/accounts/{{accountId}}/transactions",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "accounts", "{{accountId}}", "transactions"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 10.99,\n  \"currency\": \"GBP\",\n  \"type\": \"deposit\",\n  \"reference\": \"Top up\"\n}\n"
+        }
+      }
+    },
+    {
+      "name": "List transactions",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/accounts/{{accountId}}/transactions",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "accounts", "{{accountId}}", "transactions"]
+        }
+      }
+    },
+    {
+      "name": "Fetch transaction",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/accounts/{{accountId}}/transactions/{{transactionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "accounts", "{{accountId}}", "transactions", "{{transactionId}}"]
+        }
+      }
+    }
+  ]
+}
